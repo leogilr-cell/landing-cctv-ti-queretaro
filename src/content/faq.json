@@ -1,0 +1,42 @@
+[
+  {
+    "categoria": "CCTV",
+    "pregunta": "¿Cuántas cámaras necesito para mi casa o negocio?",
+    "respuesta": "Depende del tamaño y los puntos de acceso. Como regla simple: una cámara por cada entrada (puerta principal, cochera, patio trasero) y una que cubra el área común. Para una casa promedio son 4 a 6 cámaras; para un negocio pequeño, 6 a 10. Lo ideal es hacer una visita para ubicar los puntos ciegos antes de decidir."
+  },
+  {
+    "categoria": "CCTV",
+    "pregunta": "¿Es mejor grabar en la nube o en un grabador local (NVR/DVR)?",
+    "respuesta": "El grabador local es más económico a largo plazo y no depende de tu internet para grabar (aunque sí para verlo remoto). La nube es más cómoda si quieres ver todo desde el celular sin pensar en el equipo, pero tiene costo mensual y depende de que tu internet esté siempre activo. La mejor opción, cuando el presupuesto lo permite, es tener ambas: grabación local como respaldo principal y nube como respaldo secundario."
+  },
+  {
+    "categoria": "CCTV",
+    "pregunta": "¿Qué resolución de cámara realmente necesito?",
+    "respuesta": "Para identificar rostros o placas a distancia normal, 4 megapixeles es un buen punto de equilibrio entre calidad y espacio de almacenamiento. Full HD (2MP) alcanza para vigilancia general de espacios cerrados. Resoluciones más altas (8MP o más) solo valen la pena si necesitas cubrir áreas muy amplias con un solo lente."
+  },
+  {
+    "categoria": "WiFi",
+    "pregunta": "¿Por qué tengo zonas muertas de WiFi en casa?",
+    "respuesta": "Casi siempre es por la distancia al router, paredes gruesas (concreto o ladrillo) o interferencia de otros aparatos electrónicos. Un solo router rara vez cubre bien una casa de dos pisos o más de 100 metros cuadrados. La solución más efectiva es un sistema mesh (varios puntos que se conectan entre sí) en vez de un solo router potente."
+  },
+  {
+    "categoria": "WiFi",
+    "pregunta": "¿Sirve de algo cambiar el canal del WiFi?",
+    "respuesta": "Sí, sobre todo en zonas con muchos vecinos con WiFi cerca (departamentos, colonias densas). Los routers suelen elegir el canal automáticamente y no siempre el mejor. Cambiar manualmente a un canal menos saturado, o usar la banda de 5GHz en vez de 2.4GHz cuando el dispositivo esté cerca, mejora bastante la velocidad real."
+  },
+  {
+    "categoria": "TI",
+    "pregunta": "¿Cada cuánto debo hacer mantenimiento a mis equipos de cómputo?",
+    "respuesta": "Un mantenimiento preventivo básico (limpieza física, revisión de disco, actualizaciones, respaldo) cada 6 meses es suficiente para uso normal de oficina u hogar. En ambientes con mucho polvo o uso intensivo, cada 3 meses. Esperar a que falle sale más caro que prevenir."
+  },
+  {
+    "categoria": "TI",
+    "pregunta": "¿Qué diferencia hay entre un problema de internet y un problema de red interna?",
+    "respuesta": "Si un solo dispositivo falla pero otros funcionan bien, casi siempre es un problema de ese equipo o su conexión (WiFi débil, tarjeta de red). Si todos los dispositivos fallan al mismo tiempo, el problema suele venir del router, el módem o el proveedor de internet. Esa distinción ayuda a saber si se resuelve en sitio o hay que reportarlo al proveedor."
+  },
+  {
+    "categoria": "Telecom",
+    "pregunta": "¿Qué es mejor para un negocio: fibra óptica o cable coaxial/cobre?",
+    "respuesta": "La fibra óptica da mayor velocidad, más estabilidad y menos interferencia, especialmente si subes archivos pesados o usas cámaras en la nube. El cable tradicional puede ser suficiente para uso ligero, pero se degrada más con la distancia. Si la fibra está disponible en tu zona, siempre es la mejor inversión a mediano plazo."
+  }
+]

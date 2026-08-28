@@ -1,0 +1,56 @@
+---
+import siteConfig from '../content/site-config.json';
+
+const { counter } = siteConfig;
+const suffix = counter.suffix ?? '+';
+const counterInit = `counter({ value: ${counter.value} })`;
+---
+
+<section class="py-16 md:py-20 bg-gradient-to-br from-brand-dark via-brand to-brand-light text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <div x-data={counterInit} x-init="init()">
+      <p class="text-5xl md:text-7xl font-extrabold mb-4">
+        <span x-ref="number" x-text="display">0</span><span aria-hidden="true">{suffix}</span>
+      </p>
+      <p class="text-lg md:text-xl text-teal-50">Clientes atendidos en Querétaro</p>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('counter', ({ value }) => ({
+      value,
+      display: '0',
+      started: false,
+      init() {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !this.started) {
+              this.started = true;
+              this.animate();
+              obs.disconnect();
+            }
+          });
+        });
+        obs.observe(this.$root);
+      },
+      animate() {
+        const duration = 1600;
+        const start = performance.now();
+        const step = (now) => {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          this.display = Math.round(this.value * eased).toLocaleString('es-MX');
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            this.display = this.value.toLocaleString('es-MX');
+          }
+        };
+        requestAnimationFrame(step);
+      },
+    }));
+  });
+</script>

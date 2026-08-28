@@ -1,0 +1,57 @@
+{
+  "business": {
+    "name": "[COMPLETAR: nombre del negocio]",
+    "category": "Instalación y mantenimiento de CCTV, soporte TI y telecomunicaciones",
+    "phone": "[COMPLETAR: número telefónico]",
+    "whatsapp": "[COMPLETAR: solo número con código de país, ej. 524421234567]",
+    "email": "[COMPLETAR: correo@dominio.com]",
+    "address": "Prol. de los Gobernadores 624, Villas del Cimatario, Manantiales del Cimatario, 76087 Santiago de Querétaro, Qro.",
+    "serviceArea": "Santiago de Querétaro, México",
+    "hours": "Lun a Vie 9:00 - 18:00, Sáb 9:00 - 14:00"
+  },
+  "seo": {
+    "title": "CCTV Querétaro | Instalación de cámaras, soporte TI y WiFi",
+    "description": "Instalación de cámaras CCTV en Querétaro, soporte de informática/TI, telecomunicaciones y mejora de señal WiFi. Cotiza tu proyecto, atención en Santiago de Querétaro.",
+    "keywords": "CCTV Querétaro, instalación de cámaras Querétaro, soporte TI Querétaro, telecomunicaciones, mejorar WiFi"
+  },
+  "hero": {
+    "title": "[COMPLETAR: eslogan o título principal del negocio]",
+    "subtitle": "Instalación y mantenimiento de cámaras de seguridad CCTV, soporte de informática y TI, telecomunicaciones y mejora de señal WiFi en Santiago de Querétaro.",
+    "badge": "Servicio técnico profesional en Querétaro"
+  },
+  "services": [
+    {
+      "title": "Instalación y mantenimiento de CCTV",
+      "description": "Instalación de cámaras de seguridad y grabadores, configuración de acceso remoto y mantenimiento preventivo."
+    },
+    {
+      "title": "Soporte de informática / TI",
+      "description": "Diagnóstico, reparación y mantenimiento de equipos de cómputo, redes y servidores para hogar y oficina."
+    },
+    {
+      "title": "Telecomunicaciones",
+      "description": "Instalación y configuración de fibra óptica, cableado estructurado y redes de datos."
+    },
+    {
+      "title": "Mejora de señal WiFi",
+      "description": "Sistemas mesh, repetidores y optimización de cobertura para eliminar zonas muertas de internet."
+    }
+  ],
+  "counter": {
+    "label": "Ya somos +[N] clientes atendidos",
+    "value": 250,
+    "suffix": "+"
+  },
+  "links": {
+    "googleReview": "https://g.page/r/CWniip3lv3OIEBM/review",
+    "googleReviewFallback": "https://search.google.com/local/writereview?placeid=0x85d344f24e2964d5:0x587662a869d7a4ea",
+    "facebook": "[COMPLETAR: URL de Facebook]",
+    "instagram": "[COMPLETAR: URL de Instagram]"
+  },
+  "form": {
+    "title": "Solicita una cotización",
+    "subtitle": "Cuéntanos tu problema y te contactamos para evaluarlo.",
+    "categories": ["CCTV", "WiFi/Red", "Soporte TI", "Telecomunicaciones", "Otro"]
+  },
+  "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3735.8748427197665!2d-100.378374889812!3d20.552301180901118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d344f24e2964d5%3A0x587662a869d7a4ea!2sProl.%20de%20los%20Gobernadores%20624%2C%20Villas%20del%20Cimatario%2C%20Manantiales%20del%20Cimatario%2C%2076087%20Santiago%20de%20Quer%C3%A9taro%2C%20Qro.!5e0!3m2!1ses!2smx!4v1787859091649!5m2!1ses!2smx"
+}

@@ -1,0 +1,137 @@
+---
+import siteConfig from '../content/site-config.json';
+
+const { form, business } = siteConfig;
+---
+
+<section id="contacto" class="py-16 md:py-20 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">{form.title}</h2>
+      <p class="text-gray-600">{form.subtitle}</p>
+    </div>
+
+    <div x-data="contactForm()">
+      <!-- Mensaje de éxito (oculto por defecto) -->
+      <div
+        x-show="submitted"
+        x-transition
+        class="bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 mb-6 text-sm"
+      >
+        ¡Gracias! Tu mensaje se envió correctamente. Pronto nos pondremos en contacto contigo.
+      </div>
+
+      <form
+        name="contacto"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        @submit.prevent="submit($event)"
+        class="space-y-5"
+      >
+        <input type="hidden" name="form-name" value="contacto" />
+        <p class="hidden" aria-hidden="true">
+          <label>No llenes este campo: <input name="bot-field" /></label>
+        </p>
+
+        <div>
+          <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+          <input
+            type="text"
+            id="nombre"
+            name="Nombre"
+            required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            placeholder="Tu nombre completo"
+          />
+        </div>
+
+        <div>
+          <label for="telefono" class="block text-sm font-medium text-gray-700 mb-1">Teléfono / WhatsApp *</label>
+          <input
+            type="tel"
+            id="telefono"
+            name="Telefono"
+            required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            placeholder="Número a 10 dígitos"
+          />
+        </div>
+
+        <div>
+          <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Categoría del problema *</label>
+          <select
+            id="categoria"
+            name="Categoria"
+            required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          >
+            <option value="" disabled selected>Selecciona una opción</option>
+            {form.categories.map((c) => (
+              <option value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="mensaje" class="block text-sm font-medium text-gray-700 mb-1">Describe tu problema *</label>
+          <textarea
+            id="mensaje"
+            name="Mensaje"
+            rows="5"
+            required
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            placeholder="Cuéntanos qué necesitas: instalación de cámaras, soporte de equipo, mejora de WiFi, etc."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-brand hover:bg-brand-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-60"
+          :disabled="sending"
+        >
+          <span x-show="!sending">Enviar mensaje</span>
+          <span x-show="sending">Enviando…</span>
+        </button>
+
+        <p class="text-xs text-gray-400 text-center mt-4">
+          Al enviar aceptas el aviso de privacidad. Tus datos se usan únicamente para darte seguimiento.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('contactForm', () => ({
+      submitted: false,
+      sending: false,
+      async submit(event) {
+        const formEl = event.target;
+        if (!this.sending) {
+          this.sending = true;
+          try {
+            const data = new FormData(formEl);
+            // La notificación de Netlify Forms llega por email al capturar el envío.
+            const res = await fetch('/', {
+              method: 'POST',
+              headers: { Accept: 'application/x-www-form-urlencoded, text/plain, */*' },
+              body: new URLSearchParams(data).toString(),
+            });
+            if (res.ok) {
+              formEl.reset();
+              this.submitted = true;
+            } else {
+              this.error = true;
+            }
+          } catch (err) {
+            this.error = true;
+          } finally {
+            this.sending = false;
+          }
+        }
+      },
+    }));
+  });
+</script>

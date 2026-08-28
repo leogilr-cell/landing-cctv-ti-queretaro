@@ -1,0 +1,209 @@
+---
+import { Image } from 'astro:assets';
+
+// Escaneo automático de imágenes: al agregar archivos a estos directorios
+// se incluyen aquí sin tocar código (se reconstruye el sitio con cada build).
+const globSources = {
+  cctv: import.meta.glob('../images/cctv/*.{jpg,jpeg,png,webp,avif}', {
+    eager: true,
+    import: 'default',
+  }),
+  computacion: import.meta.glob('../images/computacion/*.{jpg,jpeg,png,webp,avif}', {
+    eager: true,
+    import: 'default',
+  }),
+  telecom: import.meta.glob('../images/telecom/*.{jpg,jpeg,png,webp,avif}', {
+    eager: true,
+    import: 'default',
+  }),
+};
+
+type Categoria = 'CCTV' | 'Computación' | 'Telecomunicaciones';
+type Slide = { src: string; alt: string; categoria: Categoria };
+
+const categoriaNames: Record<string, Categoria> = {
+  cctv: 'CCTV',
+  computacion: 'Computación',
+  telecom: 'Telecomunicaciones',
+};
+
+const slides: Slide[] = [];
+(Object.keys(globSources) as (keyof typeof globSources)[]).forEach((folder) => {
+  Object.entries(globSources[folder]).forEach(([path, src]) => {
+    const file = path.split('/').pop()?.replace(/\.[^.]+$/, '') ?? 'trabajo';
+    const categoria = categoriaNames[folder];
+    slides.push({
+      src: src as string,
+      alt: `Trabajo de ${categoria.toLowerCase()} realizado en Querétaro: ${file}`,
+      categoria,
+    });
+  });
+});
+
+// Metadatos ligeros para el cliente (la categoría). Las imágenes se renderizan
+// en el DOM con astro:assets y se leen desde ahí vía data-*.
+const slidesData = JSON.stringify(slides.map((s) => ({ categoria: s.categoria })));
+---
+
+<div class="w-full py-4" x-data="showcase(JSON.parse(document.getElementById('showcase-data').textContent))">
+  <script type="application/json" id="showcase-data" set:html={slidesData}></script>
+
+  <!-- Pestañas / filtro -->
+  {slides.length > 0 && (
+    <div class="flex flex-wrap justify-center gap-2 mb-6" role="tablist" aria-label="Filtrar trabajos por categoría">
+      <template x-for="cat in cats" :key="cat">
+        <button
+          type="button"
+          class="px-4 py-2 rounded-full text-sm font-medium transition-colors border"
+          :class="filter === cat ? 'bg-brand text-white border-brand' : 'bg-white text-gray-600 border-gray-300 hover:border-brand hover:text-brand'"
+          @click="setFilter(cat)"
+          :aria-pressed="filter === cat"
+          x-text="cat"
+        ></button>
+      </template>
+    </div>
+  )}
+
+  {slides.length === 0 && (
+    <p class="text-center text-sm text-gray-500 max-w-2xl mx-auto">
+      Agrega imágenes a las carpetas <code class="bg-gray-100 px-1 rounded">src/images/cctv</code>,{' '}
+      <code class="bg-gray-100 px-1 rounded">src/images/computacion</code> y{' '}
+      <code class="bg-gray-100 px-1 rounded">src/images/telecom</code> para mostrar aquí tus trabajos. Se
+      incluirán automáticamente en el siguiente build, sin tocar código.
+    </p>
+  )}
+
+  {slides.length > 0 && (
+    <div class="relative max-w-4xl mx-auto">
+      <div
+        class="overflow-hidden rounded-2xl shadow-lg select-none"
+        @touchstart="touchStart($event)"
+        @touchmove="touchMove($event)"
+        @touchend="touchEnd($event)"
+      >
+        <div class="flex transition-transform duration-500 ease-out" :style="'transform: translateX(-' + offset + '%)'">
+          {slides.map((slide, i) => (
+            <div class="w-full shrink-0" data-idx={i} data-categoria={slide.categoria} x-show="filter === 'Todos' || $el.dataset.categoria === filter">
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                widths={[375, 768, 1024, 1440]}
+                sizes="(max-width: 768px) 100vw, 900px"
+                class="w-full h-64 sm:h-80 md:h-96 object-cover"
+                loading="lazy"
+              />
+              <div class="px-4 py-3 bg-white text-sm text-gray-600">
+                <span class="font-medium text-brand mr-2">{slide.categoria}</span>
+                {slide.alt}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Puntos -->
+      <div class="flex justify-center gap-2 mt-4">
+        {slides.map((slide, i) => (
+          <button
+            type="button"
+            class="w-3 h-3 rounded-full transition-colors"
+            :class="$el.dataset.idx == current ? 'bg-brand' : 'bg-gray-300'"
+            @click="goTo($el.dataset.idx)"
+            data-idx={i}
+            data-categoria={slide.categoria}
+            x-show="filter === 'Todos' || $el.dataset.categoria === filter"
+            aria-label={('Ir a la diapositiva ' + (i + 1))}
+          ></button>
+        ))}
+      </div>
+
+      <!-- Flechas -->
+      {slides.length > 1 && (
+        <>
+          <button
+            type="button"
+            class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-gray-700 hover:bg-white z-10"
+            @click="prev()"
+            aria-label="Anterior"
+            x-show="visibleIds.length > 1"
+          >&#10094;</button>
+          <button
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-gray-700 hover:bg-white z-10"
+            @click="next()"
+            aria-label="Siguiente"
+            x-show="visibleIds.length > 1"
+          >&#10095;</button>
+        </>
+      )}
+    </div>
+  )}
+</div>
+
+<script is:inline>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('showcase', ({ slides }) => ({
+      slides,
+      cats: ['Todos', 'CCTV', 'Computación', 'Telecomunicaciones'],
+      filter: 'Todos',
+      current: 0,
+      startX: 0,
+      startY: 0,
+      moved: false,
+
+      isVisible(i) {
+        return this.filter === 'Todos' || this.slides[i].categoria === this.filter;
+      },
+      get visibleIds() {
+        return this.slides.map((s, i) => (this.isVisible(i) ? i : -1)).filter((i) => i >= 0);
+      },
+      get offset() {
+        const v = this.visibleIds;
+        const p = v.indexOf(this.current);
+        return p < 0 ? 0 : p;
+      },
+
+      setFilter(f) {
+        this.filter = f;
+        const v = this.visibleIds;
+        this.current = v.length ? v[0] : 0;
+      },
+      goTo(i) {
+        i = Number(i);
+        if (this.isVisible(i)) this.current = i;
+      },
+      next() {
+        const v = this.visibleIds;
+        if (v.length < 2) return;
+        const p = v.indexOf(this.current);
+        this.current = v[(p + 1) % v.length];
+      },
+      prev() {
+        const v = this.visibleIds;
+        if (v.length < 2) return;
+        const p = v.indexOf(this.current);
+        this.current = v[(p - 1 + v.length) % v.length];
+      },
+
+      touchStart(e) {
+        this.startX = e.touches[0].clientX;
+        this.startY = e.touches[0].clientY;
+        this.moved = false;
+      },
+      touchMove(e) {
+        const dx = e.touches[0].clientX - this.startX;
+        const dy = e.touches[0].clientY - this.startY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
+          this.moved = true;
+        }
+      },
+      touchEnd(e) {
+        if (!this.moved) return;
+        const dx = e.changedTouches[0].clientX - this.startX;
+        if (Math.abs(dx) > 40) {
+          dx < 0 ? this.next() : this.prev();
+        }
+      },
+    }));
+  });
+</script>

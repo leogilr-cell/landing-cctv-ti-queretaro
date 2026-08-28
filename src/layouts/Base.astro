@@ -1,0 +1,55 @@
+---
+import siteConfig from '../content/site-config.json';
+import '../styles/global.css';
+
+const { business, seo } = siteConfig;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com').toString();
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="keywords" content={seo.keywords} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Alpine.js vía CDN (defer para que los scripts de los componentes registren
+         sus componentes con Alpine.data antes de que Alpine inicialice) -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:locale" content="es_MX" />
+
+    <!-- Datos estructurados LocalBusiness -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: business.name,
+      description: seo.description,
+      telephone: business.phone,
+      email: business.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: business.address,
+        addressLocality: 'Santiago de Querétaro',
+        addressRegion: 'Querétaro',
+        addressCountry: 'MX',
+      },
+      url: Astro.url.origin,
+      areaServed: business.serviceArea,
+      openingHours: business.hours,
+      priceRange: '$$',
+    })}></script>
+  </head>
+  <body class="bg-white text-gray-800 antialiased">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,76 @@
+---
+import faqs from '../content/faq.json';
+
+const faqData = JSON.stringify(faqs);
+---
+
+<section id="faq" class="py-16 md:py-20 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">Preguntas frecuentes</h2>
+      <p class="text-gray-600">Respuestas de experto a las dudas más comunes sobre nuestros servicios.</p>
+    </div>
+
+    <script type="application/json" id="faq-data" set:html={faqData}></script>
+
+    <div x-data="faq(JSON.parse(document.getElementById('faq-data').textContent))">
+      <!-- Búsqueda simple -->
+      <div class="mb-6">
+        <input
+          type="text"
+          x-model="q"
+          placeholder="Buscar una pregunta…"
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          aria-label="Buscar pregunta"
+        />
+      </div>
+
+      <div class="space-y-3">
+        <template x-for="(faqItem, i) in filteredFaqs" :key="i">
+          <div class="border border-gray-200 rounded-xl overflow-hidden">
+            <button
+              type="button"
+              @click="toggle(i)"
+              class="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-gray-50 hover:bg-gray-100 transition-colors"
+              :aria-expanded="open === i"
+            >
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wide text-brand" x-text="faqItem.categoria"></span>
+                <h3 class="text-sm sm:text-base font-semibold text-gray-900 mt-0.5" x-text="faqItem.pregunta"></h3>
+              </div>
+              <span class="text-brand shrink-0" :class="open === i ? 'rotate-180' : ''">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 transition-transform" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+              </span>
+            </button>
+            <div x-show="open === i" class="px-5 py-4 text-sm text-gray-600 leading-relaxed border-t border-gray-100" x-text="faqItem.respuesta"></div>
+          </div>
+        </template>
+        <p x-show="filteredFaqs.length === 0" class="text-center text-gray-500 py-4">
+          No encontramos resultados para tu búsqueda.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('faq', ({ faqs }) => ({
+      faqs,
+      q: '',
+      open: null,
+      get filteredFaqs() {
+        const term = this.q.trim().toLowerCase();
+        if (!term) return this.faqs;
+        return this.faqs.filter((f) =>
+          f.pregunta.toLowerCase().includes(term) ||
+          f.respuesta.toLowerCase().includes(term) ||
+          f.categoria.toLowerCase().includes(term)
+        );
+      },
+      toggle(i) {
+        this.open = this.open === i ? null : i;
+      },
+    }));
+  });
+</script>
