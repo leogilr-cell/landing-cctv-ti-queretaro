@@ -160,7 +160,7 @@ const slidesData = JSON.stringify(slides.map((s) => ({ categoria: s.categoria })
       get offset() {
         const v = this.visibleIds;
         const p = v.indexOf(this.current);
-        return p < 0 ? 0 : p;
+        return p < 0 ? 0 : p * 100;
       },
 
       setFilter(f) {
